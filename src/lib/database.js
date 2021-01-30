@@ -3,9 +3,12 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-class Database {
+export default class Database {
     constructor() {
-        this.connection = mongoose
+        console.log(process.env.URI, 'process.env')
+        console.log(process.env.API_PORT, 'process.env')
+        this.mongoose = mongoose
+        mongoose
             .connect(process.env.URI, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
@@ -14,9 +17,5 @@ class Database {
                 if (err) throw err
                 console.log('Mongodb ok!')
             })
-        mongoose.set('useCreateIndex', true)
     }
 }
-
-const DB = new Database()
-module.exports = DB

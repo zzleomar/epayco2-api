@@ -1,26 +1,41 @@
 /* eslint-disable class-methods-use-this */
 // import dotenv from 'dotenv'
 // import _ from 'lodash'
+import mongoDbUser from '../models/User'
+import mongoDbAccount from '../models/Account'
 
 class AccountController {
     async create(req, res) {
-        res.send({ status: 'ok', data: req.body })
+        const result = await mongoDbUser.getUserByEmail(req.body.email)
+        if (result) {
+            res.send({
+                status: 'Error',
+                data: {
+                    message:
+                        'El correo electrónico ya se encuentra registrado para un usuario',
+                },
+            })
+        } else {
+            const user = await mongoDbUser.createUser(req.body)
+            const data = await mongoDbAccount.createAccount(user)
+            res.send({ status: 'Ok', data })
+        }
     }
 
     async query(req, res) {
-        res.send({ status: 'ok', data: req.body })
+        res.send({ status: 'Ok', data: req.body })
     }
 
     async recharge(req, res) {
-        res.send({ status: 'ok', data: req.body })
+        res.send({ status: 'Ok', data: req.body })
     }
 
     async requestPayment(req, res) {
-        res.send({ status: 'ok', data: req.body })
+        res.send({ status: 'Ok', data: req.body })
     }
 
     async pay(req, res) {
-        res.send({ status: 'ok', data: req.body })
+        res.send({ status: 'Ok', data: req.body })
     }
 }
 
