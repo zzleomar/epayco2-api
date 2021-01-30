@@ -14,7 +14,228 @@
     }
   },
   "schemes": ["http", "https"],
-  "paths": {},
+  "paths": {
+    "/account/create": {
+      "post": {
+        "tags": ["account"],
+        "summary": "Create account",
+        "operationId": "create",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ]
+      }
+    },
+    "/account/query": {
+      "post": {
+        "tags": ["account"],
+        "summary": "query account",
+        "operationId": "query",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Query"
+            }
+          }
+        ]
+      }
+    },
+    "/account/recharge": {
+      "post": {
+        "tags": ["account"],
+        "summary": "recharge account",
+        "operationId": "recharge",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Recharge"
+            }
+          }
+        ]
+      }
+    },
+    "/pay/requestPayment": {
+      "post": {
+        "tags": ["pay"],
+        "summary": "request payment",
+        "operationId": "requestPayment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RequestPayment"
+            }
+          }
+        ]
+      }
+    },
+    "/pay/confirm": {
+      "post": {
+        "tags": ["pay"],
+        "summary": "confirm request payment",
+        "operationId": "confirmPayment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfirmPayment"
+            }
+          }
+        ]
+      }
+    }
+  },
 
-  "definitions": {}
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["fullName", "document", "phone", "email"],
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "User fullname"
+        },
+        "document": {
+          "type": "string",
+          "description": "User document, (CI, pasaporte, DNI)"
+        },
+        "phone": {
+          "type": "string",
+          "description": "User phone example +1253462365"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Account": {
+      "type": "object",
+      "required": ["uuid", "user", "balance"],
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "description": "Account token"
+        },
+        "user": {
+          "type": "object",
+          "description": "Account user"
+        },
+        "balance": {
+          "type": "float",
+          "description": "Account balance"
+        }
+      },
+      "xml": {
+        "name": "Account"
+      }
+    },
+    "History": {
+      "type": "object",
+      "required": ["amount", "type", "status", "account"],
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "amount of the operation"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of operation"
+        },
+        "status": {
+          "type": "string",
+          "description": "Type of operation"
+        },
+        "account": {
+          "type": "object",
+          "description": "account of operation"
+        }
+      },
+      "xml": {
+        "name": "History"
+      }
+    },
+
+    "Query": {
+      "type": "Request",
+      "required": ["document", "phone"],
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "User document"
+        },
+        "phone": {
+          "type": "string",
+          "description": "User phone"
+        }
+      },
+      "xml": {
+        "name": "Query"
+      }
+    },
+
+    "Recharge": {
+      "type": "Request",
+      "required": ["document", "phone", "amount"],
+      "properties": {
+        "document": {
+          "type": "string",
+          "description": "User document"
+        },
+        "phone": {
+          "type": "string",
+          "description": "User phone"
+        },
+        "amount": {
+          "type": "number",
+          "description": "amount"
+        }
+      },
+      "xml": {
+        "name": "Recharge"
+      }
+    },
+
+    "ConfirmPayment": {
+      "type": "Request",
+      "required": ["token", "uuid"],
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "token validator"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "uuid of the destination account"
+        }
+      },
+      "xml": {
+        "name": "ConfirmPayment"
+      }
+    }
+  }
 }

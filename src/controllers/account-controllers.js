@@ -54,7 +54,7 @@ class AccountController {
         )
         if (result) {
             let account = await mongoDbAccount.getAccountByUser(result._id)
-            account.balance += amount
+            account.balance += parseFloat(amount)
             account = await mongoDbAccount.updateAccout(account)
             return res.send({ status: 'Ok', data: account })
         }

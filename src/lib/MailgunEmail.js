@@ -7,8 +7,6 @@ dotenv.config()
 class MailgunEmail {
     constructor() {
         this.mailgun = mailgun
-        console.log(process.env.MAILGUNAPIKEY)
-        console.log(process.env.MAILGUNDOMAIN)
         this.mg = mailgun({
             apiKey: process.env.MAILGUNAPIKEY,
             domain: process.env.MAILGUNDOMAIN,

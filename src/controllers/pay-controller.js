@@ -17,9 +17,9 @@ class PayController {
         )
         if (result) {
             const account = await mongoDbAccount.getAccountByUser(result._id)
-            if (account.balance >= amount) {
+            if (account.balance >= parseFloat(amount)) {
                 const transaction = await mongoDbHistory.createHistory({
-                    amount,
+                    amount: parseFloat(amount),
                     type: 'Payment',
                     status: 'Pending',
                     account,
