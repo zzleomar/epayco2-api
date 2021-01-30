@@ -39,8 +39,24 @@ class MongoDb extends Database {
         return result
     }
 
+    async updateHistory(history) {
+        await this.History.updateOne({ _id: history._id }, history)
+        const response = await this.getHistoryById(history._id)
+        return response
+    }
+
     async getHistoryById(id) {
         const response = await this.History.findOne({ _id: id }).populate({
+            path: 'account',
+            populate: {
+                path: 'user',
+            },
+        })
+        return response
+    }
+
+    async getHistoryByToken(token) {
+        const response = await this.History.findOne({ token }).populate({
             path: 'account',
             populate: {
                 path: 'user',

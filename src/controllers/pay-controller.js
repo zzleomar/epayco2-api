@@ -17,7 +17,7 @@ class PayController {
         )
         if (result) {
             const account = await mongoDbAccount.getAccountByUser(result._id)
-            if (account.amount >= amount) {
+            if (account.balance >= amount) {
                 const transaction = await mongoDbHistory.createHistory({
                     amount,
                     type: 'Payment',
@@ -44,14 +44,14 @@ class PayController {
                         },
                     })
                 }
-            } else {
-                return res.send({
-                    status: 'Error',
-                    data: {
-                        message: 'Saldo insuficiente',
-                    },
-                })
+                return res.send({ status: 'Ok', data: account })
             }
+            return res.send({
+                status: 'Error',
+                data: {
+                    message: 'Saldo insuficiente',
+                },
+            })
         }
         return res.send({
             status: 'Error',
@@ -63,6 +63,39 @@ class PayController {
     }
 
     async confirm(req, res) {
+        const { token, uuid } = req.body
+        let history = await mongoDbHistory.getHistoryByToken(token)
+        if (history && history.status === 'Pending') {
+            let accountDestiny = await mongoDbAccount.getAccountByUuid(uuid)
+            if (accountDestiny) {
+                let { account } = history
+                account.balance -= history.amount
+                account = await mongoDbAccount.updateAccout(account)
+
+                accountDestiny.balance += history.amount
+                accountDestiny = await mongoDbAccount.updateAccout(
+                    accountDestiny
+                )
+
+                history.status = 'Success'
+                history = await mongoDbHistory.updateHistory(history)
+                return res.send({ status: 'Ok', data: history })
+            }
+            return res.send({
+                status: 'Error',
+                data: {
+                    message:
+                        'uuid invalido, debe ingresar el uuid de la cuenta del usuario que recibe el pago',
+                },
+            })
+        }
+        return res.send({
+            status: 'Error',
+            data: {
+                message: 'Token invalido',
+            },
+        })
+
         res.send({ status: 'Ok', data: req.body })
     }
 }
