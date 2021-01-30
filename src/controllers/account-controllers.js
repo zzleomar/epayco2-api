@@ -51,14 +51,6 @@ class AccountController {
             },
         })
     }
-
-    async requestPayment(req, res) {
-        res.send({ status: 'Ok', data: req.body })
-    }
-
-    async pay(req, res) {
-        res.send({ status: 'Ok', data: req.body })
-    }
 }
 
 const accountController = new AccountController()

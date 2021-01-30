@@ -7,7 +7,7 @@ class MongoDb extends Database {
         super()
         this.schema = this.mongoose.Schema(
             {
-                token: { type: String, required: true },
+                uuid: { type: String, required: true },
                 user: { type: String, ref: 'User' },
                 balance: { type: Number },
             },
@@ -21,11 +21,11 @@ class MongoDb extends Database {
     async createAccount(user) {
         const uuid = uuid4()
         await this.Account.create({
-            token: uuid,
+            uuid,
             user: user._id,
             balance: 0,
         })
-        const result = this.getAccountByToken(uuid)
+        const result = this.getAccountByUuid(uuid)
         return result
     }
 
@@ -36,12 +36,12 @@ class MongoDb extends Database {
 
     async updateAccout(account) {
         await this.Account.updateOne({ _id: account._id }, account)
-        const response = await this.getAccountByToken(account.token)
+        const response = await this.getAccountByUuid(account.uuid)
         return response
     }
 
-    async getAccountByToken(token) {
-        const response = await this.Account.findOne({ token }).populate('user')
+    async getAccountByUuid(uuid) {
+        const response = await this.Account.findOne({ uuid }).populate('user')
         return response
     }
 }

@@ -12,11 +12,5 @@ router.post('/query', (req, res) => {
 router.post('/recharge', (req, res) => {
     accountController.recharge(req, res)
 })
-router.post('/requestPayment', (req, res) => {
-    accountController.requestPayment(req, res)
-})
-router.post('/pay', (req, res) => {
-    accountController.pay(req, res)
-})
 
 export default router
