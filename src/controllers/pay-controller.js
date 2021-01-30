@@ -95,8 +95,6 @@ class PayController {
                 message: 'Token invalido',
             },
         })
-
-        res.send({ status: 'Ok', data: req.body })
     }
 }
 

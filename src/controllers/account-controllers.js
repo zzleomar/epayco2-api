@@ -28,7 +28,22 @@ class AccountController {
     }
 
     async query(req, res) {
-        res.send({ status: 'Ok', data: req.body })
+        const { document, phone } = req.body
+        const result = await mongoDbUser.getUserByDocumentAndPhone(
+            document,
+            phone
+        )
+        if (result) {
+            const account = await mongoDbAccount.getAccountByUser(result._id)
+            return res.send({ status: 'Ok', data: account })
+        }
+        return res.send({
+            status: 'Error',
+            data: {
+                message:
+                    'Los datos ingresados no coinciden con las de un usuario registrado',
+            },
+        })
     }
 
     async recharge(req, res) {
