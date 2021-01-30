@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API REST de EPAYCO2",
+    "version": "1.0.0",
+    "title": "EPAYCO2 REST API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "dmy.leomar@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "schemes": ["http", "https"],
+  "paths": {},
+
+  "definitions": {}
+}
