@@ -5,8 +5,6 @@ dotenv.config()
 
 export default class Database {
     constructor() {
-        console.log(process.env.URI, 'process.env')
-        console.log(process.env.API_PORT, 'process.env')
         this.mongoose = mongoose
         mongoose
             .connect(process.env.URI, {

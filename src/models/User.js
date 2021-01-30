@@ -32,8 +32,8 @@ class MongoDb extends Database {
         return response
     }
 
-    async getUserById(_id) {
-        const response = await this.User.findOne({ _id })
+    async getUserByDocumentAndPhone(document, phone) {
+        const response = await this.User.findOne({ document, phone })
         return response
     }
 }

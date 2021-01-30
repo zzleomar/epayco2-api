@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 // import dotenv from 'dotenv'
 // import _ from 'lodash'
@@ -6,20 +7,24 @@ import mongoDbAccount from '../models/Account'
 
 class AccountController {
     async create(req, res) {
+        const { document, phone } = req.body
         const result = await mongoDbUser.getUserByEmail(req.body.email)
-        if (result) {
-            res.send({
+        const result2 = await mongoDbUser.getUserByDocumentAndPhone(
+            document,
+            phone
+        )
+        if (result || result2) {
+            return res.send({
                 status: 'Error',
                 data: {
                     message:
-                        'El correo electrónico ya se encuentra registrado para un usuario',
+                        'Ya se encuentra registrado un usuario con la información ingresada',
                 },
             })
-        } else {
-            const user = await mongoDbUser.createUser(req.body)
-            const data = await mongoDbAccount.createAccount(user)
-            res.send({ status: 'Ok', data })
         }
+        const user = await mongoDbUser.createUser(req.body)
+        const data = await mongoDbAccount.createAccount(user)
+        return res.send({ status: 'Ok', data })
     }
 
     async query(req, res) {
@@ -27,7 +32,24 @@ class AccountController {
     }
 
     async recharge(req, res) {
-        res.send({ status: 'Ok', data: req.body })
+        const { document, phone, amount } = req.body
+        const result = await mongoDbUser.getUserByDocumentAndPhone(
+            document,
+            phone
+        )
+        if (result) {
+            let account = await mongoDbAccount.getAccountByUser(result._id)
+            account.balance += amount
+            account = await mongoDbAccount.updateAccout(account)
+            return res.send({ status: 'Ok', data: account })
+        }
+        return res.send({
+            status: 'Error',
+            data: {
+                message:
+                    'Los datos ingresados no coinciden con las de un usuario registrado',
+            },
+        })
     }
 
     async requestPayment(req, res) {

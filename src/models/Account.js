@@ -29,6 +29,17 @@ class MongoDb extends Database {
         return result
     }
 
+    async getAccountByUser(user) {
+        const response = await this.Account.findOne({ user }).populate('user')
+        return response
+    }
+
+    async updateAccout(account) {
+        await this.Account.updateOne({ _id: account._id }, account)
+        const response = await this.getAccountByToken(account.token)
+        return response
+    }
+
     async getAccountByToken(token) {
         const response = await this.Account.findOne({ token }).populate('user')
         return response
