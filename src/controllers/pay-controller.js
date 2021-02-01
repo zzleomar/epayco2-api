@@ -68,26 +68,18 @@ class PayController {
         if (history && history.status === 'Pending') {
             let accountDestiny = await mongoDbAccount.getAccountByUuid(uuid)
             if (accountDestiny) {
-                let { account } = history
-                account.balance -= history.amount
-                account = await mongoDbAccount.updateAccout(account)
-
                 accountDestiny.balance += history.amount
                 accountDestiny = await mongoDbAccount.updateAccout(
                     accountDestiny
                 )
-
-                history.status = 'Success'
-                history = await mongoDbHistory.updateHistory(history)
-                return res.send({ status: 'Ok', data: history })
             }
-            return res.send({
-                status: 'Error',
-                data: {
-                    message:
-                        'uuid invalido, debe ingresar el uuid de la cuenta del usuario que recibe el pago',
-                },
-            })
+
+            let { account } = history
+            account.balance -= history.amount
+            account = await mongoDbAccount.updateAccout(account)
+            history.status = 'Success'
+            history = await mongoDbHistory.updateHistory(history)
+            return res.send({ status: 'Ok', data: account })
         }
         return res.send({
             status: 'Error',
