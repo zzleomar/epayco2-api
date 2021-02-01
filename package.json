@@ -4,10 +4,13 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "build": "babel ./src --out-dir ./build",
-    "start": "nodemon --exec babel-node src/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
     "docs": "./node_modules/.bin/apidoc -i src/ -o apidoc/",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node ./build/index.js",
+    "build-babel": "babel -d ./build ./src -s",
+    "clean": "rm -rf build && mkdir build"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

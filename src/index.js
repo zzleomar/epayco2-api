@@ -18,11 +18,15 @@ app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 router(app)
 
-const port = process.env.API_PORT || 9000
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(port, () => {
-        console.log('Server is running..')
-    })
-}
+// const port = process.env.API_PORT || 8080
+// if (process.env.NODE_ENV !== 'test') {
+//     app.listen(port, () => {
+//         console.log('Server is running..')
+//     })
+// }
+const port = process.env.PORT || 8080
+app.listen(port, () => {
+    console.log('Express server listening on port', port)
+})
 
 export default app
